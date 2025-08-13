@@ -95,7 +95,37 @@ docker run --rm -v "$PWD:/workspace" sigma-toolchain:latest \
   convert -t elasticsearch \
   rules/macos/*.yml -o out/elastic_macos.ndjson
 ```
+---
+## Using sigma-cli directly
 
+You can also bypass the Makefile and run `sigma-cli` manually for ad-hoc conversions.
+
+### Example: Windows Sysmon rule → Splunk SPL
+```bash
+sigma convert -t splunk \
+  -p splunk_windows \
+  -p splunk_sysmon_acceleration \
+  rules/windows/example_rule.yml \
+  -o out/splunk_rule.spl
+````
+
+### Example: Windows Sysmon rule → Microsoft Defender KQL
+
+```bash
+sigma convert -t kusto \
+  -p windows \
+  -p sysmon \
+  rules/windows/example_rule.yml \
+  -o out/mde_rule.kql
+```
+
+### Example: Linux auditd rule → Elastic
+
+```bash
+sigma convert -t es-qs \
+  rules/linux/example_rule.yml \
+  -o out/elastic_rule.ndjson
+```
 ---
 
 ## Makefile Targets
