@@ -1,0 +1,37 @@
+title: Office Spawns Suspicious Scripting or Shell Interpreter
+id: 2c0a8b0e-bd6f-4b26-8a92-7e0b67a7b6b9
+status: test
+description: Detects Office applications spawning cmd, powershell, wscript, or cscript indicative of macro or template injection.
+author: Aung Myat Thu (w01f)
+date: 2025/08/13
+tags:
+  - attack.t1204
+  - attack.t1047
+logsource:
+  product: windows
+  category: process_creation
+  service: security
+detection:
+  sel_parent_office:
+    ParentImage|endswith:
+      - '\WINWORD.EXE'
+      - '\EXCEL.EXE'
+      - '\POWERPNT.EXE'
+      - '\MSACCESS.EXE'
+  sel_child_susp:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+  condition: sel_parent_office and sel_child_susp
+fields:
+  - UtcTime
+  - Image
+  - ParentImage
+  - CommandLine
+  - User
+  - ComputerName
+falsepositives:
+  - Legitimate admin scripts launched from Office add-ins
+level: high

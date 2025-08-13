@@ -1,0 +1,30 @@
+title: osascript Launches Network Tool on macOS
+id: 8f7f36a0-9b92-4c76-b62a-1c3e1b3b4e51
+status: test
+description: Detects AppleScript (osascript) launching curl/python which may reflect scriptable persistence or downloader behavior.
+author: Aung Myat Thu (w01f)
+date: 2025/08/13
+tags:
+  - attack.t1059
+logsource:
+  product: macos
+  category: process_creation
+  service: edr
+detection:
+  sel_parent:
+    ParentImage|endswith: '/osascript'
+  sel_child:
+    Image|endswith:
+      - '/curl'
+      - '/python'
+  condition: sel_parent and sel_child
+fields:
+  - UtcTime
+  - Image
+  - ParentImage
+  - CommandLine
+  - User
+  - ComputerName
+falsepositives:
+  - IT automation profiles using AppleScript wrappers
+level: medium

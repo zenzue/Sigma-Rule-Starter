@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  sigma:
+    build: .
+    image: sigma-toolchain:latest
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace

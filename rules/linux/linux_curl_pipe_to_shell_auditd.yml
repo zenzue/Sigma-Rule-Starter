@@ -1,0 +1,29 @@
+title: Curl Output Piped to Shell (auditd)
+id: 5f8b764f-2a0f-4c7e-8a5d-4a6ff9d6a1b2
+status: test
+description: Detects curl piped to sh/bash which is a common initial access or loader technique.
+author: Aung Myat Thu (w01f)
+date: 2025/08/13
+tags:
+  - attack.t1059.004
+logsource:
+  product: linux
+  service: auditd
+  category: process_creation
+detection:
+  sel:
+    exe|endswith:
+      - '/bash'
+      - '/sh'
+    proctitle|re: 'curl\\s+.*\\|\\s*(sh|bash)'
+  condition: sel
+fields:
+  - syscall
+  - exe
+  - proctitle
+  - uid
+  - auid
+  - pid
+falsepositives:
+  - Developer bootstrap scripts and CI jobs
+level: high
